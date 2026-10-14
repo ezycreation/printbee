@@ -1,8 +1,8 @@
 <?php
 /**
- * Read-only hymn lookup for the Occasion front end. The browser calls THIS file; the Hymnbee key never
+ * Read-only hymn lookup for the Printbee front end. The browser calls THIS file; the Hymnbee key never
  * leaves the server. Served from the cached bundle (see hymns_lib.php / sync.php), never live per request.
- *   GET hymns.php?number=22[&lang=ne]     -> one hymn, in Occasion's shape
+ *   GET hymns.php?number=22[&lang=ne]     -> one hymn, in Printbee's shape
  *   GET hymns.php?action=search&q=...     -> [{songNumber,title}] searched in OUR copy (not Hymnbee /search)
  *   GET hymns.php?action=languages        -> [{code,name}]
  */

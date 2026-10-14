@@ -1,0 +1,18 @@
+# Append these lines to the repo's existing .gitignore (do not replace it).
+# Server-side data and secrets: never commit.
+api/*.sqlite
+api/*.sqlite3
+api/cache/*
+!api/cache/.gitignore
+*.env
+!deploy/*.env.example
+.DS_Store
+# Append these lines to the repo's existing .gitignore (do not replace it).
+# Server-side data and secrets: never commit.
+api/*.sqlite
+api/*.sqlite3
+api/cache/*
+!api/cache/.gitignore
+*.env
+!deploy/*.env.example
+.DS_Store

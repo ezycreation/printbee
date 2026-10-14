@@ -1446,7 +1446,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    const safe = (titleVal || 'occasion').replace(/[^a-z0-9\- _]/gi,'').trim().replace(/\s+/g,'-').toLowerCase() || 'occasion';
+    const safe = (titleVal || 'printbee').replace(/[^a-z0-9\- _]/gi,'').trim().replace(/\s+/g,'-').toLowerCase() || 'printbee';
     a.download = safe + '.json';
     document.body.appendChild(a);
     a.click();
@@ -1586,7 +1586,7 @@
     renderPrintStage();
     const titleVal = document.getElementById('projectTitle').value;
     const prevTitle = document.title;
-    document.title = (titleVal || 'Occasion') + ' - Print Layout';
+    document.title = (titleVal || 'Printbee') + ' - Print Layout';
     window.print();
     setTimeout(() => { document.title = prevTitle; }, 500);
   }
@@ -1767,7 +1767,7 @@
     }
     if(shareCancelled) return;
 
-    const titleVal = document.getElementById('projectTitle').value || 'Occasion';
+    const titleVal = document.getElementById('projectTitle').value || 'Printbee';
     const filename = titleVal.replace(/[^a-z0-9\- _]/gi, '').trim().replace(/\s+/g, '-').toLowerCase() + '.pdf';
 
     function downloadInstead(message){
@@ -1820,7 +1820,7 @@
     if(document.body.dataset.mode === 'print') renderPrintStage();
   }
 
-  document.title = 'Occasion';
+  document.title = 'Printbee';
   renderAll();
   appBooted = true;
 
@@ -1895,7 +1895,7 @@
     }catch(e){
       // Got a response, but it wasn't valid JSON — almost always a PHP-side error (a fatal
       // error page, a missing file, etc.), not a connectivity problem. Surface the real status.
-      showGateError('The server returned an unexpected response (status ' + res.status + '). This usually means a server-side error \u2014 check api/check_access.php is uploaded correctly.');
+      showGateError('The server returned an unexpected response (status ' + res.status + ') for ' + (res.url || GATE_API) + ' \u2014 open that address directly to see what the server says.');
       gateSubmitBtn.disabled = false;
       gateSubmitBtn.textContent = 'Continue';
       return;

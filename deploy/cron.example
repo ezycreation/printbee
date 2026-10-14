@@ -1,0 +1,2 @@
+# /etc/cron.d/occasion-hymns   — revalidate the hymn copy (ETag; cheap 304 when unchanged)
+*/15 * * * * www-data php /var/www/occasion/api/sync.php >> /var/log/occasion-hymns.log 2>&1

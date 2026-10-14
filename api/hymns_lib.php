@@ -176,7 +176,7 @@ function hymns_pick_language(array $translations, $requested, array $preferred){
   return $codes ? (string) $codes[0] : null;     // fall back to any available language
 }
 
-/** Map a Hymnbee hymn into the shape Occasion already uses: {songNumber,title,englishTitle,content,...}. */
+/** Map a Hymnbee hymn into the shape Printbee already uses: {songNumber,title,englishTitle,content,...}. */
 function hymns_map_for_app(array $hymn, $requestedLang = null, array $preferred = ['ne', 'hi', 'en']){
   $translations = (isset($hymn['translations']) && is_array($hymn['translations'])) ? $hymn['translations'] : [];
   $code = hymns_pick_language($translations, $requestedLang, $preferred);

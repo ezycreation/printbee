@@ -101,7 +101,7 @@ foreach($rows as $r){
 $inactive = $total - $active - $neverUsed;
 ?>
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Occasion — Admin</title>
+<html><head><meta charset="UTF-8"><title>Printbee — Admin</title>
 <style>
   body{font-family:-apple-system,sans-serif;max-width:860px;margin:40px auto;padding:0 20px;color:#25282b;}
   h1{font-size:20px; margin-bottom:4px;}
@@ -127,7 +127,7 @@ $inactive = $total - $active - $neverUsed;
 </style>
 </head><body>
 <a class="logout" href="?logout=1">Log out</a>
-<h1>Occasion — Registered users</h1>
+<h1>Printbee — Registered users</h1>
 <p class="note">Anyone entering a phone number in the app gets access automatically \u2014 no approval needed. Use Block below if you need to revoke someone's access; it takes effect within about a week (their device re-checks periodically).</p>
 <div class="stats">
   <div class="stat"><div class="n"><?= $total ?></div><div class="l">Total</div></div>

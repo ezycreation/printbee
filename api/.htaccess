@@ -1,0 +1,8 @@
+# Belt and braces (the Apache <Directory> block in deploy/ is the real protection).
+<FilesMatch "\.(sqlite|sqlite3|db|env|tmp)$">
+  Require all denied
+</FilesMatch>
+<FilesMatch "^(hymns_lib|db|sync)\.php$">
+  Require all denied
+</FilesMatch>
+Options -Indexes

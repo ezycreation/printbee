@@ -1,12 +1,12 @@
-// Occasion service worker. Lives at <folder>/sw.js and only ever handles requests inside its own folder.
+// Printbee service worker. Lives at <folder>/sw.js and only ever handles requests inside its own folder.
 const CACHE_PREFIX = 'occasion-';
-const CACHE_VERSION = 'occasion-v56';
+const CACHE_VERSION = 'occasion-v58';
 const SCOPE_URL = new URL(self.registration.scope);   // e.g. https://host/occasion/
 const APP_SHELL = [
   './',
   './index.html',
-  './styles.css?v=56',
-  './script.js?v=56',
+  './styles.css?v=58',
+  './script.js?v=58',
   './manifest.json',
   './lib/html2canvas.min.js',
   './lib/jspdf.umd.min.js',
