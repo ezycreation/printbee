@@ -83,5 +83,21 @@ check('explicit lang wins', hymns_map_for_app($h, 'en')['languageCode'] === 'en'
 check('unknown lang falls back', hymns_map_for_app($h, 'xx', ['zz'])['languageCode'] === 'ne');
 check('no translations -> empty content, no crash', hymns_map_for_app(['hymnNumber' => 5])['content'] === '');
 
+echo "env file parsing:\n";
+$env = hymns_parse_env_text("\xEF\xBB\xBF# comment\r\nHYMNS_API_BASE_URL=https://127.0.0.1/hymns\r\nHYMNS_API_KEY=abc123\r\nHYMNS_API_VERIFY_TLS=false        # inline comment\r\nexport HYMNS_CACHE_TTL_MIN=5\r\nQUOTED=\"has # hash\"\r\nSINGLE='x y'\r\n\r\nno_equals_line\r\n");
+check('plain values parsed (CRLF + BOM)', $env['HYMNS_API_BASE_URL'] === 'https://127.0.0.1/hymns' && $env['HYMNS_API_KEY'] === 'abc123');
+check('inline comment stripped (TLS flag reads as "false")', $env['HYMNS_API_VERIFY_TLS'] === 'false');
+check('export prefix handled', $env['HYMNS_CACHE_TTL_MIN'] === '5');
+check('quoted value keeps its #', $env['QUOTED'] === 'has # hash' && $env['SINGLE'] === 'x y');
+check('junk line ignored', !array_key_exists('no_equals_line', $env));
+
+echo "env file location:\n";
+putenv('HYMNS_ENV_FILE');   // make sure it is unset
+$c = hymns_env_file_candidates();
+check('default: printbee path first, occasion path as fallback', $c === ['/etc/printbee/hymns.env', '/etc/occasion/hymns.env']);
+putenv('HYMNS_ENV_FILE=/tmp/custom.env');
+check('HYMNS_ENV_FILE overrides the defaults', hymns_env_file_candidates() === ['/tmp/custom.env']);
+putenv('HYMNS_ENV_FILE');
+
 echo "\n$pass passed, $fail failed\n";
 exit($fail ? 1 : 0);

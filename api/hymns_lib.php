@@ -8,19 +8,46 @@ const HYMNS_CHORUS_MARK = "\u{2063}";   // invisible separator; marks a chorus p
 const HYMNS_BOOK_SLUG = 'default';
 const HYMNS_FAIL_BACKOFF_SECONDS = 60;
 
-/** Values from /etc/occasion/hymns.env (or $HYMNS_ENV_FILE): KEY=VALUE lines. Works for web AND cron. */
+/** Parse KEY=VALUE lines. Handles comments, quotes, `export KEY=...`, CRLF and a UTF-8 BOM. */
+function hymns_parse_env_text($text){
+  $out = [];
+  $text = preg_replace('/^\xEF\xBB\xBF/', '', (string) $text);
+  foreach(preg_split('/\r\n|\r|\n/', $text) as $line){
+    $line = trim($line);
+    if($line === '' || $line[0] === '#') continue;
+    $line = preg_replace('/^export\s+/', '', $line);
+    if(strpos($line, '=') === false) continue;
+    [$k, $v] = explode('=', $line, 2);
+    $k = trim($k); $v = trim($v);
+    if($v !== '' && ($v[0] === '"' || $v[0] === "'")){
+      $q = $v[0]; $endq = strpos($v, $q, 1);
+      $v = ($endq === false) ? substr($v, 1) : substr($v, 1, $endq - 1);
+    } else {
+      $v = trim(preg_replace('/\s+#.*$/', '', $v));      // drop a trailing "  # comment"
+    }
+    if($k !== '') $out[$k] = $v;
+  }
+  return $out;
+}
+
+/** Where the env file may live: $HYMNS_ENV_FILE if set, otherwise printbee's folder, then the older occasion one. */
+function hymns_env_file_candidates(){
+  $explicit = getenv('HYMNS_ENV_FILE');
+  if($explicit !== false && $explicit !== '') return [$explicit];
+  return ['/etc/printbee/hymns.env', '/etc/occasion/hymns.env'];
+}
+
+/** Values from the first readable env file. Works for web AND cron. */
 function hymns_env_file_values(){
   static $vals = null;
   if($vals !== null) return $vals;
   $vals = [];
-  $file = getenv('HYMNS_ENV_FILE') ?: '/etc/occasion/hymns.env';
-  if(is_readable($file)){
-    foreach((array) @file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line){
-      $line = trim($line);
-      if($line === '' || $line[0] === '#' || strpos($line, '=') === false) continue;
-      [$k, $v] = explode('=', $line, 2);
-      $vals[trim($k)] = trim(trim($v), "\"'");
-    }
+  foreach(hymns_env_file_candidates() as $file){
+    if(!is_readable($file)) continue;
+    $raw = @file_get_contents($file);
+    if($raw === false) continue;
+    $vals = hymns_parse_env_text($raw);
+    break;
   }
   return $vals;
 }
